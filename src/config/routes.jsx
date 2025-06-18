@@ -1,4 +1,4 @@
-// src/config/menuRoutes.js
+// src/config/routes.js
 import {
   PieChartOutlined,
   DesktopOutlined,
@@ -7,15 +7,24 @@ import {
   FileOutlined,
 } from "@ant-design/icons";
 
-// Component inline hoặc import đều được
+import { MdOutlineSecurity, MdAdminPanelSettings } from "react-icons/md";
+
+import { Link } from "react-router-dom";
+
+import GroupRole from "../pages/Security/GroupRole";
+import ListUserSystem from "../pages/Security/ListUserSystem";
+
 const Option1 = () => <div>📊 Option 1 Content</div>;
 const Option2 = () => <div>🖥 Option 2 Content</div>;
-const UserTom = () => <div>👤 User: Tom</div>;
+const UserTom = () => <div>👤 User: Tom
+  <Link to="/user/tom/detail">Xem chi tiết</Link>
+</div>;
 const UserBill = () => <div>👤 User: Bill</div>;
 const UserAlex = () => <div>👤 User: Alex</div>;
 const Team1 = () => <div>👥 Team 1</div>;
 const Team2 = () => <div>👥 Team 2</div>;
 const Files = () => <div>📁 Files Content</div>;
+const UserTomDetail = () => <div>📋 Chi tiết User: Tom</div>;
 
 const menuRoutes = [
   {
@@ -43,6 +52,12 @@ const menuRoutes = [
         label: "Tom",
         path: "/user/tom",
         element: <UserTom />,
+      },
+      {
+        key: "3-1",
+        path: "/user/tom/detail",
+        element: <UserTomDetail />,
+        hidden: true,
       },
       {
         key: "4",
@@ -84,6 +99,27 @@ const menuRoutes = [
     path: "/files",
     element: <Files />,
   },
+  {
+    key: "security",
+    label: "Security",
+    icon: <MdOutlineSecurity />,
+    children: [
+      {
+        key: '10',
+        label: 'Group Role Admin',
+        icon: null,
+        path: '/group-role',
+        element: <GroupRole />
+      },
+      {
+        key: "11",
+        label: "Admin",
+        icon: <MdAdminPanelSettings />,
+        path: "/admin-permission",
+        element: <ListUserSystem />,
+      }
+    ]
+  }
 ];
 
 export default menuRoutes;
