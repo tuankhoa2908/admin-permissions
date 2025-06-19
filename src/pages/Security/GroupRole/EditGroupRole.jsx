@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
 import { Button } from 'antd';
 import PermissionCheckboxTree from './components/PermissionCheckboxTree';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const EditGroupRole = () => {
     const navigate = useNavigate();
-    const [selectedPermissions, setSelectedPermissions] = useState([
-        'user', 'user-bill', 'files'
-    ]);
+    const location = useLocation();
+    const group_role = location.state.group;
+    const [selectedPermissions, setSelectedPermissions] = useState([]);
 
     const handleSave = () => {
         console.log('Quyền đã chọn:', selectedPermissions);
-        // Gửi API lưu quyền cho group
     };
 
     return (
         <>
             <button className='btn-primary' onClick={() => navigate(-1)}>Quay lại</button>
-            <h2>Phân quyền nhóm</h2>
+            <h2>Phân quyền nhóm {group_role}</h2>
             <PermissionCheckboxTree
                 value={selectedPermissions}
                 onChange={setSelectedPermissions}

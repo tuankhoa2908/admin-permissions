@@ -1,15 +1,16 @@
 // PermissionCheckboxTree.jsx
 import React, { useState, useEffect, useMemo } from 'react';
-import { Checkbox } from 'antd';
+import { Checkbox, Card, Divider } from 'antd';
 import routes from '../../../../config/routes';
 
 const extractPermissionTree = (routes) => {
     const dfs = (items) =>
         items
-            .filter(item => !item.hidden && item.key_permissions)
+            .filter(item => item.key_permissions)
             .map(item => ({
                 key: item.key_permissions,
-                label: item.label,
+                label: item.label || item.path || item.key,
+                hidden: item.hidden || false,
                 children: item.children ? dfs(item.children) : undefined,
             }));
     return dfs(routes);
@@ -77,19 +78,53 @@ const PermissionCheckboxTree = ({ value = [], onChange }) => {
     };
 
     const renderTree = (nodes, depth = 0) =>
-        nodes.map(node => (
-            <div key={node.key} style={{ marginLeft: depth * 20 }}>
+        nodes.map((node) => (
+            <div
+                key={node.key}
+                style={{
+                    marginLeft: depth * 20,
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    transition: 'background 0.2s',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    backgroundColor: checked.includes(node.key) ? '#f0f5ff' : 'transparent',
+                    fontWeight: node.children ? 600 : 400,
+                    fontSize: 14,
+                }}
+                onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#e6f7ff';
+                }}
+                onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = checked.includes(node.key)
+                        ? '#f0f5ff'
+                        : 'transparent';
+                }}
+            >
                 <Checkbox
                     checked={checked.includes(node.key)}
                     onChange={(e) => handleCheck(node, e.target.checked)}
                 >
-                    {node.label}
+                    <span style={node.hidden ? { color: '#999' } : {}}>
+                        {node.label}
+                        {node.hidden && <span style={{ marginLeft: 4, fontStyle: 'italic' }}>[Route Ẩn]</span>}
+                    </span>
                 </Checkbox>
-                {node.children && renderTree(node.children, depth + 1)}
+
+                {node.children && (
+                    <div style={{ marginTop: 4 }}>{renderTree(node.children, depth + 1)}</div>
+                )}
             </div>
         ));
 
-    return <div>{renderTree(permissionTree)}</div>;
+
+    return (
+        <Card title="Danh sách quyền truy cập" variant={false}>
+            {renderTree(permissionTree)}
+            <Divider style={{ margin: '16px 0 0' }} />
+        </Card>
+    );
+
 };
 
 export default PermissionCheckboxTree;

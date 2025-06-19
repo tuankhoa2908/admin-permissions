@@ -61,6 +61,7 @@ const menuRoutes = [
       {
         key: "/user/tom/detail",
         path: "/user/tom/detail",
+        label: 'Info User',
         element: <UserTomDetail />,
         hidden: true,
         key_permissions: 'user-tom-detail',
